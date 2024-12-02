@@ -6,9 +6,26 @@ import NotFound from "./NotFound";
 
 function Profile() {
   const [username, setusername] = useState(null);
-  const [temp, setTemp] = useState("Enter the Valid Github Username");
+  const [temp, setTemp] = useState("");
 
   const navigate = useNavigate();
+
+  const UserFound = () => {
+    return (
+      <div className="m-5 flex justify-center items-center flex-col text-center">
+        <h3 className="text-sm">{temp}</h3>
+        <button
+          className="m-5 border border-black p-2 rounded-xl bg-gray-100 hover:text-orange-900 hover:bg-gray-200"
+          onClick={() => {
+            navigate(`/profile/${username}`);
+            // navigate("/profile");
+          }}
+        >
+          {temp && "Click Here to visit"}
+        </button>
+      </div>
+    );
+  };
 
   const submithandler = async (e) => {
     e.preventDefault();
@@ -19,13 +36,14 @@ function Profile() {
 
       if (!response.ok) {
         setusername("");
-        alert("User Name Found");
-        navigate("/profile");
+        setTemp(null);
+        alert("UserName Not Found");
+        return;
       }
 
       const data = await response.json();
       console.log(data);
-      navigate(`/profile/${username}`);
+      setTemp("UserName Found");
     } catch (error) {}
   };
 
@@ -37,7 +55,6 @@ function Profile() {
       >
         Enter the Username
       </label>
-
       <input
         type="text"
         name="username"
@@ -51,7 +68,6 @@ function Profile() {
         }}
         value={username}
       />
-
       <button
         onClick={submithandler}
         type="submit"
@@ -59,10 +75,10 @@ function Profile() {
       >
         Search
       </button>
-
       <div className="text-xl text-gray-700 w-full max-w-lg text-center">
         Here You can see the profiles
       </div>
+      <UserFound />
     </div>
   );
 }
