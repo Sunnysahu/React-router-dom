@@ -14,15 +14,17 @@ function Profile() {
     return (
       <div className="m-5 flex justify-center items-center flex-col text-center">
         <h3 className="text-sm">{temp}</h3>
-        <button
-          className="m-5 border border-black p-2 rounded-xl bg-gray-100 hover:text-orange-900 hover:bg-gray-200"
-          onClick={() => {
-            navigate(`/profile/${username}`);
-            // navigate("/profile");
-          }}
-        >
-          {temp && "Click Here to visit"}
-        </button>
+        {temp && (
+          <button
+            className="m-5 border border-black p-2 rounded-xl bg-gray-100 hover:text-orange-900 hover:bg-gray-200"
+            onClick={() => {
+              navigate(`/profile/${username}`);
+              // navigate("/profile");
+            }}
+          >
+            Click Here to visit
+          </button>
+        )}
       </div>
     );
   };
