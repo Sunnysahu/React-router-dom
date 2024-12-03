@@ -1,29 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { useNavigate, Outlet } from "react-router-dom";
-
-import NotFound from "./NotFound";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [username, setusername] = useState(null);
   const [temp, setTemp] = useState("");
+  const [apiData, setApiData] = useState(" ");
 
   const navigate = useNavigate();
 
   const UserFound = () => {
     return (
-      <div className="m-5 flex justify-center items-center flex-col text-center">
+      <div className="m-3 flex justify-center items-center flex-col text-center">
         <h3 className="text-sm">{temp}</h3>
         {temp && (
-          <button
-            className="m-5 border border-black p-2 rounded-xl bg-gray-100 hover:text-orange-900 hover:bg-gray-200"
-            onClick={() => {
-              navigate(`/profile/${username}`);
-              // navigate("/profile");
-            }}
-          >
-            Click Here to visit
-          </button>
+          <div className="flex flex-col">
+            <h1>Username : {apiData.login}</h1>
+            <h1>Name : {apiData.name}</h1>
+            <h1>Bio : {apiData.bio}</h1>
+            <h1>Location : {apiData.location}</h1>
+            <button
+              className="m-5 border border-black p-2 rounded-xl bg-gray-100 hover:text-orange-900 hover:bg-gray-200"
+              onClick={() => {
+                console.log("Navigating to:", username, `/profile/${username}`);
+                console.log(apiData);
+
+                navigate(`/profile/${username}`, { state: { apiData } });
+                console.log("Clicked", username);
+
+                // navigate("/profile");
+              }}
+            >
+              Click Here to Info
+            </button>
+          </div>
         )}
       </div>
     );
@@ -32,21 +42,30 @@ function Profile() {
   const submithandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
-      console.log(response.ok);
+    if (username) {
+      try {
+        const response = await fetch(
+          `https://api.github.com/users/${username}`
+        );
+        console.log(response.ok);
 
-      if (!response.ok) {
-        setusername("");
-        setTemp(null);
-        alert("UserName Not Found");
-        return;
-      }
+        if (!response.ok) {
+          setusername("");
+          setTemp(null);
+          alert("UserName Not Found");
+          navigate("/profile");
+          return;
+        }
 
-      const data = await response.json();
-      console.log(data);
-      setTemp("UserName Found");
-    } catch (error) {}
+        const data = await response.json();
+        console.log(data);
+        setApiData(data);
+
+        console.log(apiData);
+
+        setTemp("UserName Found");
+      } catch (error) {}
+    }
   };
 
   return (
@@ -80,6 +99,7 @@ function Profile() {
       <div className="text-xl text-gray-700 w-full max-w-lg text-center">
         Here You can see the profiles
       </div>
+      {/* <Outlet props={apiData} /> */}
       <UserFound />
     </div>
   );

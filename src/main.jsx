@@ -38,20 +38,24 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
-        children: [
-          {
-            path: ":userId",
-            element: <UserProfile />,
-            // loader: userProfileLoader,
-            errorElement: <NotFound />,
-            children: [
-              {
-                path: "about",
-                element: <UserAbout />,
-              },
-            ],
-          },
-        ],
+        // children: [
+        //   {
+        //     path: ":userId",
+        //     element: <UserProfile />,
+        //     // loader: userProfileLoader,
+        //     errorElement: <NotFound />,
+        //     children: [
+        //       {
+        //         path: "about",
+        //         element: <UserAbout />,
+        //       },
+        //     ],
+        //   },
+        // ],
+      },
+      {
+        path: "/profile/:userId",
+        element: <UserProfile />,
       },
       {
         path: "contact",
